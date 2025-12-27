@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins } from "next/font/google"; //Roboto import
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+import AuthProvider from '../app/DataProvider/AuthProvider/AuthProvider'
+import ProfileProvider from '../app/DataProvider/ProfileDataProvider/ProfileProvider'
+// Roboto font setup
+const poppins = Poppins({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-roboto",
 });
 
 export const metadata: Metadata = {
@@ -24,11 +22,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${poppins.className} antialiased`}>
+        <AuthProvider>
+          <ProfileProvider>
         {children}
-      </body>
+        </ProfileProvider>
+        </AuthProvider>
+        </body>
     </html>
   );
 }

@@ -1,0 +1,59 @@
+import mongoose from "mongoose";
+const ProfileHrSchema=new mongoose.Schema({
+user:{
+   type:mongoose.Schema.Types.ObjectId,
+   ref:"HrAuth",
+   required:true
+},   
+ professional_name:{
+    type:String,
+    trim:true,
+    lowercase:true,
+    required:true
+ }, 
+   designation:{
+    type:String,
+    trim:true,
+    lowercase:true,
+    required:true
+ }, 
+  employe_id:{
+    type:String,
+    trim:true,
+    lowercase:true,
+    required:true
+ },
+  job_type:{
+    type:String,
+    trim:true,
+    lowercase:true,
+    required:true
+ },
+ experience:{
+    type:String,
+    trim:true,
+    lowercase:true,
+    required:true
+ },  
+  salary:{
+    type:String,
+    trim:true,
+    lowercase:true,
+    required:true
+ },  
+  email:{
+    type:String,
+    trim:true,
+    lowercase:true,
+    required:true
+ }, 
+  phone_number:{
+    type:String,
+    trim:true,
+    lowercase:true,
+    required:true
+ },          
+})
+
+const ProfileHr=mongoose.models.ProfileHr || mongoose.model("ProfileHr",ProfileHrSchema)
+export default ProfileHr
