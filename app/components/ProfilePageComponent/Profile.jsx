@@ -11,6 +11,7 @@ const Profile = () => {
   const { user } = useContext(AuthContext);
   const { profileData, isLoading } = useProfile();
   const [editForm, setEditForm] = useState(false);
+  const [editedId,setEditedId]=useState(null)
   if (isLoading) {
     return <div>data is loading...</div>;
   }
@@ -73,21 +74,22 @@ const Profile = () => {
                   <span className="ml-1 capitalize">{data?.phone_number}</span>
                 </div>
               </div>
-            </div>
-          ))}
-          <div className="flex justify-end mt-6">
-            <Button handleEvent={() => setEditForm(true)} btnType={"button"}>
+                   <div className="flex justify-end mt-6">
+            <Button handleEvent={() => {
+              setEditForm(true)
+              setEditedId(data._id)
+            }} btnType={"button"}>
               Changes
             </Button>
           </div>
+            </div>
+          ))}
         </div>
       )}
       {editForm === true && (
         <>
-          <div className="flex justify-end mt-6">
-            <Button handleEvent={() => setEditForm(false)} btnType={"button"}>
-              Changes
-            </Button>
+          <div className="max-w-[700px] mb-30 mx-auto flex flex-col  justify-center  py-10 px-8 shadow-2xl">
+            <EditForm initialValues={profileData.find((i)=>i._id===editedId)}/>
           </div>
         </>
       )}
@@ -291,12 +293,174 @@ export function ProfileForm() {
 }
 
 //edit funnction
-export function EditForm(){
+export function EditForm({initialValues}) {
+   const { profileData } = useProfile();
+  const formik = useFormik({
+    initialValues: initialValues,
+    enableReinitialize:true,
+    onSubmit: async (values, { resetForm }) => {
+      // await createProfileData(values);
+      resetForm();
+    },
+  });
   return (
     <>
-    <div>
-      mirmonir
-    </div>
+        <form onSubmit={formik.handleSubmit} className="w-full space-y-4">
+          <div className="flex flex-col   items-center w-full gap-y-4 ">
+            <div className="flex flex-col gap-y-1 w-full">
+              <Input
+                label={"Professional Name"}
+                labelFor={"name"}
+                inputName={"professional_name"}
+                inputType={"text"}
+                placeHolder={"enter your Name"}
+                inputValue={formik.values.professional_name}
+                handleChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                errors={formik.errors.professional_name}
+                touched={formik.touched.professional_name}
+              />
+              {formik.touched.professional_name &&
+                formik.errors.professional_name && (
+                  <p className="text-red-500">
+                    {formik.errors.professional_name}
+                  </p>
+                )}
+            </div>
+            <div className="flex flex-col gap-y-1 w-full">
+              <InputSelect
+                label={"Select An Designation"}
+                selectName={"designation"}
+                selectValue={formik.values.designation}
+                handleChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                errors={formik.errors.designation}
+                touched={formik.touched.designation}
+                optionValue={[
+                  { id: 1, value: "Front-end developer" },
+                  { id: 2, value: "backend developer" },
+                  { id: 3, value: "UX/UI Designer" },
+                ]}
+              />
+              {formik.touched.designation && formik.errors.designation && (
+                <p className="text-red-600">{formik.errors.designation}</p>
+              )}
+            </div>
+          </div>
+          <div className="flex flex-col   items-center w-full gap-y-4 ">
+            <div className="flex flex-col gap-y-1 w-full">
+              <Input
+                label={"EmployeId"}
+                labelFor={"employe_id"}
+                inputName={"employe_id"}
+                inputType={"text"}
+                placeHolder={"enter your Id"}
+                inputValue={formik.values.employe_id}
+                handleChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                errors={formik.errors.employe_id}
+                touched={formik.touched.employe_id}
+              />
+              {formik.touched.employe_id && formik.errors.employe_id && (
+                <p className="text-red-500">{formik.errors.employe_id}</p>
+              )}
+            </div>
+            <div className="flex flex-col gap-y-1 w-full">
+              <InputSelect
+                label={"Select An JobType"}
+                selectName={"job_type"}
+                selectValue={formik.values.job_type}
+                handleChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                errors={formik.errors.job_type}
+                touched={formik.touched.job_type}
+                optionValue={[
+                  { id: 1, value: "Remote" },
+                  { id: 2, value: "On-Site" },
+                  { id: 3, value: "Hybrid" },
+                ]}
+              />
+              {formik.touched.job_type && formik.errors.job_type && (
+                <p className="text-red-600">{formik.errors.job_type}</p>
+              )}
+            </div>
+          </div>
+          <div className="flex flex-col   items-center w-full gap-y-4 ">
+            <div className="flex flex-col gap-y-1 w-full">
+              <Input
+                label={"Experience"}
+                labelFor={"experience"}
+                inputName={"experience"}
+                inputType={"text"}
+                placeHolder={"enter your Experiences"}
+                inputValue={formik.values.experience}
+                handleChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                errors={formik.errors.experience}
+                touched={formik.touched.experience}
+              />
+              {formik.touched.experience && formik.errors.experience && (
+                <p className="text-red-500">{formik.errors.experience}</p>
+              )}
+            </div>
+            <div className="flex flex-col gap-y-1 w-full">
+              <Input
+                label={"Salary"}
+                labelFor={"salary"}
+                inputName={"salary"}
+                inputType={"text"}
+                placeHolder={"enter your Salary"}
+                inputValue={formik.values.salary}
+                handleChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                errors={formik.errors.salary}
+                touched={formik.touched.salary}
+              />
+              {formik.touched.salary && formik.errors.salary && (
+                <p className="text-red-500">{formik.errors.salary}</p>
+              )}
+            </div>
+          </div>
+          <div className="flex flex-col   items-center w-full gap-y-4 ">
+            <div className="flex flex-col gap-y-1 w-full">
+              <Input
+                label={"Email"}
+                labelFor={"email"}
+                inputName={"email"}
+                inputType={"email"}
+                placeHolder={"enter your Email"}
+                inputValue={formik.values.email}
+                handleChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                errors={formik.errors.email}
+                touched={formik.touched.email}
+              />
+              {formik.touched.email && formik.errors.email && (
+                <p className="text-red-500">{formik.errors.email}</p>
+              )}
+            </div>
+            <div className="flex flex-col gap-y-1 w-full">
+              <Input
+                label={"PhoneNumber"}
+                labelFor={"phone_number"}
+                inputName={"phone_number"}
+                inputType={"text"}
+                placeHolder={"enter your PhoneNumber"}
+                inputValue={formik.values.phone_number}
+                handleChange={formik.handleChange}
+                handleBlur={formik.handleBlur}
+                errors={formik.errors.phone_number}
+                touched={formik.touched.phone_number}
+              />
+              {formik.touched.phone_number && formik.errors.phone_number && (
+                <p className="text-red-500">{formik.errors.phone_number}</p>
+              )}
+            </div>
+          </div>
+          <div className="mt-6">
+            <Button btnType={"submit"}>Submit</Button>
+          </div>
+        </form>
     </>
-  )
+  );
 }

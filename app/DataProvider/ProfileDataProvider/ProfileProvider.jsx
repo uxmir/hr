@@ -121,6 +121,10 @@ const ProfileProvider = ({ children }) => {
       })
     }
    }
+   //editedfunction
+   const editProfileData=async(id,formData)=>{
+   
+   }
    useEffect(()=>{
     getProfileData()
    },[])
