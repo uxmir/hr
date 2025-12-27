@@ -40,7 +40,7 @@ const signUpUser=async(formData)=>{
         router.push("/admin")
       }
       else if(data.user.category==='employe'){
-        router.push("/")
+        router.push("/user/profile")
       }
     }
     else{

@@ -1,6 +1,7 @@
 
 
 "use client";
+import { useRouter } from "next/navigation";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 const ProfileContext = createContext();
   const initialState = {
@@ -45,6 +46,7 @@ const ProfileContext = createContext();
   };
 const ProfileProvider = ({ children }) => {
    const [state,dispatch]=useReducer(profileReducer,initialState)
+   const router=useRouter()
    //intregetting api
    const createProfileData=async(formData)=>{
     const token=localStorage.getItem("token")
@@ -74,6 +76,7 @@ const ProfileProvider = ({ children }) => {
           payload:data.profile
         })
         alert("data is created ")
+        router.push("/")
       }
     } catch (error) {
       dispatch({

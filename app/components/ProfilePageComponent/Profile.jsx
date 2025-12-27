@@ -1,6 +1,6 @@
 "use client";
 import { AuthContext } from "@/app/DataProvider/AuthProvider/AuthProvider";
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Button from "../Button/Button";
@@ -9,99 +9,95 @@ import InputSelect from "../inputSelect/InputSelect";
 import { useProfile } from "@/app/DataProvider/ProfileDataProvider/ProfileProvider";
 const Profile = () => {
   const { user } = useContext(AuthContext);
-  const { createProfileData, profileData, isLoading } = useProfile();
-  const formik = useFormik({
-    initialValues: {
-      professional_name: "",
-      designation: "",
-      employe_id: "",
-      job_type: "",
-      experience: "",
-      salary: "",
-      email: "",
-      phone_number: "",
-    },
-    onSubmit: async (values, { resetForm }) => {
-      //  await createProfileData(values)
-      resetForm();
-    },
-  });
+  const { profileData, isLoading } = useProfile();
+  const [editForm, setEditForm] = useState(false);
   if (isLoading) {
     return <div>data is loading...</div>;
   }
-
   return (
     <>
-      <ProfileForm />
-      <div className="max-w-[700px] mb-30 mx-auto flex flex-col  justify-center  py-10 px-8 shadow-2xl ">
-        <div className="flex items-center gap-x-3">
-          <div className="w-30 h-30 rounded-full flex justify-center items-center text-center bg-gray-100 text-gray-800">
-            <span className="text-center uppercase text-5xl ">
-              {user?.name.charAt(0)}
-            </span>
+      {editForm !== true && (
+        <div className="max-w-[700px] mb-30 mx-auto flex flex-col  justify-center  py-10 px-8 shadow-2xl ">
+          <div className="flex items-center gap-x-3">
+            <div className="w-30 h-30 rounded-full flex justify-center items-center text-center bg-gray-100 text-gray-800">
+              <span className="text-center uppercase text-5xl ">
+                {user?.name.charAt(0)}
+              </span>
+            </div>
+            <div className="flex flex-col  text-gray-600">
+              <span className="font-medium">{user?.name}</span>
+              <span>{user?.email}</span>
+            </div>
           </div>
-          <div className="flex flex-col  text-gray-600">
-            <span className="font-medium">{user?.name}</span>
-            <span>{user?.email}</span>
+          {profileData?.map((data, index) => (
+            <div key={index} className="mt-6 flex flex-col gap-y-4 capitalize">
+              <div className="flex justify-between items-center gap-4 text-gray-600">
+                <div className="">
+                  <span className="font-medium">ProfessionalName:</span>
+                  <span className="ml-1">
+                    {data?.professional_name || "Mir Moniruzzaman"}
+                  </span>
+                </div>
+                <div>
+                  <span className="font-medium">Designation:</span>
+                  <span className="ml-1">{data?.designation}</span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center gap-4 text-gray-600">
+                <div className="">
+                  <span className="font-medium">EmployeId:</span>
+                  <span className="ml-1">{data?.employe_id}</span>
+                </div>
+                <div className="">
+                  <span className="font-medium ">JobType:</span>
+                  <span className="ml-1 capitalize">{data?.job_type}</span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center gap-4 text-gray-600">
+                <div className="">
+                  <span className="font-medium">experience:</span>
+                  <span className="ml-1">{data?.experience}Years</span>
+                </div>
+                <div className="">
+                  <span className="font-medium ">salary:</span>
+                  <span className="ml-1 capitalize">{data?.salary}BDT</span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center gap-4 text-gray-600">
+                <div className="">
+                  <span className="font-medium">email:</span>
+                  <span className="ml-1">{data?.email}</span>
+                </div>
+                <div className="">
+                  <span className="font-medium ">phoneNumber:</span>
+                  <span className="ml-1 capitalize">{data?.phone_number}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+          <div className="flex justify-end mt-6">
+            <Button handleEvent={() => setEditForm(true)} btnType={"button"}>
+              Changes
+            </Button>
           </div>
         </div>
-        {profileData?.map((data, index) => (
-          <div key={index} className="mt-6 flex flex-col gap-y-4 capitalize">
-            <div className="flex justify-between items-center gap-4 text-gray-600">
-              <div className="">
-                <span className="font-medium">ProfessionalName:</span>
-                <span className="ml-1">
-                  {data?.professional_name || "Mir Moniruzzaman"}
-                </span>
-              </div>
-              <div>
-                <span className="font-medium">Designation:</span>
-                <span className="ml-1">{data?.designation}</span>
-              </div>
-            </div>
-            <div className="flex justify-between items-center gap-4 text-gray-600">
-              <div className="">
-                <span className="font-medium">EmployeId:</span>
-                <span className="ml-1">{data?.employe_id}</span>
-              </div>
-              <div className="pr-32">
-                <span className="font-medium ">JobType:</span>
-                <span className="ml-1 capitalize">{data?.job_type}</span>
-              </div>
-            </div>
-            <div className="flex justify-between items-center gap-4 text-gray-600">
-              <div className="">
-                <span className="font-medium">experience:</span>
-                <span className="ml-1">{data?.experience}Years</span>
-              </div>
-              <div className="pr-32">
-                <span className="font-medium ">salary:</span>
-                <span className="ml-1 capitalize">{data?.salary}BDT</span>
-              </div>
-            </div>
-            <div className="flex justify-between items-center gap-4 text-gray-600">
-              <div className="">
-                <span className="font-medium">email:</span>
-                <span className="ml-1">{data?.email}</span>
-              </div>
-              <div className="pr-18">
-                <span className="font-medium ">phoneNumber:</span>
-                <span className="ml-1 capitalize">{data?.phone_number}</span>
-              </div>
-            </div>
+      )}
+      {editForm === true && (
+        <>
+          <div className="flex justify-end mt-6">
+            <Button handleEvent={() => setEditForm(false)} btnType={"button"}>
+              Changes
+            </Button>
           </div>
-        ))}
-        <div className="flex justify-end mt-6">
-          <Button>Changes</Button>
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 };
 
 export default Profile;
 
-function ProfileForm() {
+export function ProfileForm() {
   const { createProfileData, profileData, isLoading } = useProfile();
   const validationSchema = Yup.object({
     professional_name: Yup.string().required("this feild is required"),
@@ -292,4 +288,15 @@ function ProfileForm() {
       </div>
     </>
   );
+}
+
+//edit funnction
+export function EditForm(){
+  return (
+    <>
+    <div>
+      mirmonir
+    </div>
+    </>
+  )
 }
