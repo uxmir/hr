@@ -9,7 +9,7 @@ import InputSelect from "../inputSelect/InputSelect";
 import { useProfile } from "@/app/DataProvider/ProfileDataProvider/ProfileProvider";
 const Profile = () => {
   const { user } = useContext(AuthContext);
-  const { profileData, isLoading } = useProfile();
+  const { profileData, isLoading,editProfileData } = useProfile();
   const [editForm, setEditForm] = useState(false);
   const [editedId,setEditedId]=useState(null)
   if (isLoading) {
@@ -89,7 +89,7 @@ const Profile = () => {
       {editForm === true && (
         <>
           <div className="max-w-[700px] mb-30 mx-auto flex flex-col  justify-center  py-10 px-8 shadow-2xl">
-            <EditForm initialValues={profileData.find((i)=>i._id===editedId)}/>
+            <EditForm id={editedId} editData={editProfileData} initialValues={profileData?.find((i)=>i._id===editedId)}/>
           </div>
         </>
       )}
@@ -293,13 +293,13 @@ export function ProfileForm() {
 }
 
 //edit funnction
-export function EditForm({initialValues}) {
-   const { profileData } = useProfile();
+export function EditForm({initialValues,id,editData}) {
+  //  const { profileData,editProfileData } = useProfile();
   const formik = useFormik({
     initialValues: initialValues,
     enableReinitialize:true,
     onSubmit: async (values, { resetForm }) => {
-      // await createProfileData(values);
+      await editData(id,values)
       resetForm();
     },
   });
@@ -314,7 +314,7 @@ export function EditForm({initialValues}) {
                 inputName={"professional_name"}
                 inputType={"text"}
                 placeHolder={"enter your Name"}
-                inputValue={formik.values.professional_name}
+                inputValue={formik.values?.professional_name}
                 handleChange={formik.handleChange}
                 handleBlur={formik.handleBlur}
                 errors={formik.errors.professional_name}
@@ -331,7 +331,7 @@ export function EditForm({initialValues}) {
               <InputSelect
                 label={"Select An Designation"}
                 selectName={"designation"}
-                selectValue={formik.values.designation}
+                selectValue={formik.values?.designation}
                 handleChange={formik.handleChange}
                 handleBlur={formik.handleBlur}
                 errors={formik.errors.designation}
@@ -355,7 +355,7 @@ export function EditForm({initialValues}) {
                 inputName={"employe_id"}
                 inputType={"text"}
                 placeHolder={"enter your Id"}
-                inputValue={formik.values.employe_id}
+                inputValue={formik.values?.employe_id}
                 handleChange={formik.handleChange}
                 handleBlur={formik.handleBlur}
                 errors={formik.errors.employe_id}
@@ -369,7 +369,7 @@ export function EditForm({initialValues}) {
               <InputSelect
                 label={"Select An JobType"}
                 selectName={"job_type"}
-                selectValue={formik.values.job_type}
+                selectValue={formik.values?.job_type}
                 handleChange={formik.handleChange}
                 handleBlur={formik.handleBlur}
                 errors={formik.errors.job_type}
@@ -393,7 +393,7 @@ export function EditForm({initialValues}) {
                 inputName={"experience"}
                 inputType={"text"}
                 placeHolder={"enter your Experiences"}
-                inputValue={formik.values.experience}
+                inputValue={formik.values?.experience}
                 handleChange={formik.handleChange}
                 handleBlur={formik.handleBlur}
                 errors={formik.errors.experience}
@@ -410,7 +410,7 @@ export function EditForm({initialValues}) {
                 inputName={"salary"}
                 inputType={"text"}
                 placeHolder={"enter your Salary"}
-                inputValue={formik.values.salary}
+                inputValue={formik.values?.salary}
                 handleChange={formik.handleChange}
                 handleBlur={formik.handleBlur}
                 errors={formik.errors.salary}
@@ -429,7 +429,7 @@ export function EditForm({initialValues}) {
                 inputName={"email"}
                 inputType={"email"}
                 placeHolder={"enter your Email"}
-                inputValue={formik.values.email}
+                inputValue={formik.values?.email}
                 handleChange={formik.handleChange}
                 handleBlur={formik.handleBlur}
                 errors={formik.errors.email}
@@ -446,7 +446,7 @@ export function EditForm({initialValues}) {
                 inputName={"phone_number"}
                 inputType={"text"}
                 placeHolder={"enter your PhoneNumber"}
-                inputValue={formik.values.phone_number}
+                inputValue={formik.values?.phone_number}
                 handleChange={formik.handleChange}
                 handleBlur={formik.handleBlur}
                 errors={formik.errors.phone_number}

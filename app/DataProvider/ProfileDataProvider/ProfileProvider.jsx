@@ -123,7 +123,28 @@ const ProfileProvider = ({ children }) => {
    }
    //editedfunction
    const editProfileData=async(id,formData)=>{
-   
+   const edit_api=process.env.NEXT_PUBLIC_PROFILE_API
+   dispatch({type:"FETCH_START"})
+   try {
+    const response=await fetch(`${edit_api}/${id}`,{
+      method:"PUT",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(formData)
+    })
+    const data= await response.json()
+    if(data.success){
+      dispatch({
+        type:"FETCH_SUCCESS",
+        payload:data.updatedProfile
+      })
+    }
+    alert('data is edited')
+   } catch (error) {
+    dispatch({
+      type:"FETCH_ERROR",
+      payload:"Data is not edited"
+    })
+   }
    }
    useEffect(()=>{
     getProfileData()
@@ -133,7 +154,8 @@ const ProfileProvider = ({ children }) => {
     profileData:state.profileData,
     isLoading:state.isLoading,
     error:state.error,
-    createProfileData
+    createProfileData,
+    editProfileData
   }}>
     {children}
     </ProfileContext.Provider>;
