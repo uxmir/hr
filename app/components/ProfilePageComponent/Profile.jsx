@@ -89,7 +89,7 @@ const Profile = () => {
       {editForm === true && (
         <>
           <div className="max-w-[700px] mb-30 mx-auto flex flex-col  justify-center  py-10 px-8 shadow-2xl">
-            <EditForm id={editedId} editData={editProfileData} initialValues={profileData?.find((i)=>i._id===editedId)}/>
+            <EditForm  event={()=>setEditForm(false)} id={editedId} editData={editProfileData} initialValues={profileData?.find((i)=>i._id===editedId)}/>
           </div>
         </>
       )}
@@ -293,7 +293,7 @@ export function ProfileForm() {
 }
 
 //edit funnction
-export function EditForm({initialValues,id,editData}) {
+export function EditForm({initialValues,id,editData,event}) {
   //  const { profileData,editProfileData } = useProfile();
   const formik = useFormik({
     initialValues: initialValues,
@@ -301,6 +301,9 @@ export function EditForm({initialValues,id,editData}) {
     onSubmit: async (values, { resetForm }) => {
       await editData(id,values)
       resetForm();
+      if(event){
+        event()
+      }
     },
   });
   return (
@@ -458,7 +461,7 @@ export function EditForm({initialValues,id,editData}) {
             </div>
           </div>
           <div className="mt-6">
-            <Button btnType={"submit"}>Submit</Button>
+            <Button  btnType={"submit"}>Submit</Button>
           </div>
         </form>
     </>
