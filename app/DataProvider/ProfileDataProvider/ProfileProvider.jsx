@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useReducer } from "react";
 const ProfileContext = createContext();
 const initialState = {
   profileData: [],
+  allProfileData:[],
   isLoading: true,
   error: null,
 };
@@ -19,15 +20,23 @@ const profileReducer = (state, action) => {
     case "FETCH_SUCCESS":
       return {
         ...state,
-        profileData: action.payload,
+        profileData:action.payload,
         isLoading: false,
         error: null,
       };
 
+      case "FETCH_ALL_DATA_SUCCESS":
+        return{
+          ...state,
+          allProfileData:action.payload,
+          isLoading:false,
+          error:null
+        };
     case "FETCH_EMTY":
       return {
         ...state,
         profileData:[],
+        allProfileData:[],
         isLoading: false,
         error: null,
       };
@@ -35,6 +44,7 @@ const profileReducer = (state, action) => {
       return {
         ...state,
         profileData:[],
+        allProfileData:[],
         isLoading: false,
         error: action.payload,
       };
@@ -150,13 +160,40 @@ const ProfileProvider = ({ children }) => {
       });
     }
   };
+  //get all data
+  const getAllProfileData=async()=>{
+    const get_all_api=process.env.NEXT_PUBLIC_ALL_PROFILE_API
+    dispatch({type:"FETCH_START"})
+    try {
+     const response=await fetch(get_all_api,{
+      method:"GET",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify()
+     }) 
+     const data=await response.json()
+     console.log(data.allprofileData)
+     if(data.success){
+      dispatch({
+        type:"FETCH_ALL_DATA_SUCCESS",
+        payload:data.allprofileData
+      })
+     }
+    } catch (error) {
+      dispatch({
+        type:"FETCH_ERROR",
+        payload:"all data is not found"
+      })
+    }
+  }
   useEffect(() => {
     getProfileData();
+    getAllProfileData()
   }, []);
   return (
     <ProfileContext.Provider
       value={{
         profileData: state.profileData,
+        allProfile:state.allProfileData,
         isLoading: state.isLoading,
         error: state.error,
         createProfileData,

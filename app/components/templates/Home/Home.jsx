@@ -1,6 +1,7 @@
 "use client";
 import { AuthContext } from "@/app/DataProvider/AuthProvider/AuthProvider";
 import Profile from '../../../components/ProfilePageComponent/Profile'
+import AllEmploye from '../../AllEmploye/AllEmploye'
 import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import {  IconLayoutDashboard, IconLayoutSidebarLeftCollapse, IconUsers,IconUser } from "@tabler/icons-react";
@@ -117,7 +118,7 @@ const Home = () => {
                  {
           activeItem===2&&(
              <div className="">
-            mir monir employe
+           <AllEmploye/>
           </div>
           )
          }
